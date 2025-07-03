@@ -49,6 +49,12 @@ def main():
                sh.kill()
                circ.split()      
 
+      for ast1 in asteroids:
+         for ast2 in asteroids:
+            if ast1.collision_asteroid_check(ast2):
+               ast1.collision_asteroid(ast2)
+               
+
 
       updatable.update(dt)
       

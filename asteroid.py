@@ -2,6 +2,7 @@ from circleshape import CircleShape
 import pygame
 from constants import *
 import random
+import math
 
 class Asteroid(CircleShape):
    def __init__(self, x, y, radius):
@@ -26,13 +27,32 @@ class Asteroid(CircleShape):
       
       else:
          angle = random.uniform(20,50)
-         old_radius = self.radius
-         asteroid1 = Asteroid(x, y, old_radius - ASTEROID_MIN_RADIUS)
+         old = self.radius
+         math.cos(math.radians(angle))
+         new_radius = self.radius - ASTEROID_MIN_RADIUS
+         dx1 = 1.5*new_radius * math.cos(math.radians(angle))
+         dy1 = 1.5*new_radius * math.sin(math.radians(angle))
+         asteroid1 = Asteroid(x+dx1, y+dy1, new_radius)
          asteroid1.velocity = velocity.rotate(angle) * 1.2
 
-         asteroid2 = Asteroid(x, y, old_radius - ASTEROID_MIN_RADIUS)
+
+         dy2 = 1.5*new_radius * math.cos(math.radians(angle))
+         dx2 = 1.5*new_radius * math.sin(math.radians(angle))
+         asteroid2 = Asteroid(x+dx2, y+dy2, new_radius)
          asteroid2.velocity = velocity.rotate(-angle) * 1.2
 
          self.kill()
 
+       
+   def collision_asteroid_check(self, asteroid):
+        
+      distance = self.position.distance_to(asteroid.position)
+
+      if distance < self.radius + asteroid.radius:
+         return True
+
+   def collision_asteroid(self, asteroid):
+      self.velocity =  -self.velocity
+      asteroid.velocity = -asteroid.velocity  
+        
     
