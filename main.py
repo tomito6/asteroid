@@ -47,14 +47,15 @@ def main():
          for sh in shots:
             if sh.collision_check(circ):
                sh.kill()
-               #circ.split()      
+               circ.split()      
 
-      for ast1 in asteroids:
-         for ast2 in asteroids:
+      asteroid_list = list(asteroids)
+
+      for i, ast1 in enumerate(asteroid_list):
+         for ast2 in asteroid_list[i+1:]:
             if ast1 != ast2 and ast1.collision_asteroid_check(ast2):
                ast1.collision_asteroid(ast2)
                
-
 
       updatable.update(dt)
       

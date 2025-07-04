@@ -7,6 +7,8 @@ import math
 class Asteroid(CircleShape):
    def __init__(self, x, y, radius):
       super().__init__(x, y, radius)
+      # self.mass = 4/3 * math.pi * radius**3
+      self.mass = 1
 
 
    def draw(self, screen):
@@ -36,8 +38,8 @@ class Asteroid(CircleShape):
          asteroid1.velocity = velocity.rotate(angle) * 1.2
 
 
-         dy2 = 1.5*new_radius * math.cos(math.radians(angle))
-         dx2 = 1.5*new_radius * math.sin(math.radians(angle))
+         dy2 = 1.5*new_radius * math.cos(math.radians(-angle))
+         dx2 = 1.5*new_radius * math.sin(math.radians(-angle))
          asteroid2 = Asteroid(x+dx2, y+dy2, new_radius)
          asteroid2.velocity = velocity.rotate(-angle) * 1.2
 
@@ -52,6 +54,23 @@ class Asteroid(CircleShape):
          return True
 
    def collision_asteroid(self, asteroid):
-      self.velocity *= 0
-      asteroid.velocity *=  0  
-        
+      
+      n = (asteroid.position - self.position).normalize()
+      
+
+      v1n = self.velocity.dot(n) 
+
+      v2n = asteroid.velocity.dot(n)
+
+      v1_n =   (v1n*(self.mass - asteroid.mass) + 2*asteroid.mass*v2n)/(self.mass + asteroid.mass)
+
+      v2_n =   (v2n*(-self.mass + asteroid.mass) + 2*self.mass*v1n)/(self.mass + asteroid.mass)
+
+      t = pygame.Vector2(-n.y, n.x)
+
+      v1t = self.velocity.dot(t)
+      v2t = asteroid.velocity.dot(t)
+
+
+      self.velocity = v1_n * n + v1t * t
+      asteroid.velocity = v2_n * n + v2t * t
