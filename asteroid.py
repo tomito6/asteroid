@@ -52,7 +52,6 @@ class Asteroid(CircleShape):
          return True
 
    def collision_asteroid(self, asteroid):
-      self.velocity =  -self.velocity
-      asteroid.velocity = -asteroid.velocity  
+      self.velocity *= 0
+      asteroid.velocity *=  0  
         
-    
